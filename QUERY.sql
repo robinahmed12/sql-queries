@@ -37,3 +37,40 @@ SELECT
     COALESCE(payment_status, 'Action Required') AS systematic_status
 FROM Bookings
 WHERE payment_status IS NULL;
+
+
+-- ============================================================
+-- Query 5: Display a comprehensive list of all users and
+-- their booking IDs, ensuring that fans who have never
+-- bought a ticket are still listed.
+-- Concepts: LEFT JOIN
+-- ============================================================
+SELECT
+    u.user_id,
+    u.full_name,
+    b.booking_id
+FROM Users u
+LEFT JOIN Bookings b ON u.user_id = b.user_id
+ORDER BY u.user_id;
+
+
+-- ============================================================
+-- Query 6: Find all ticket bookings where the total cost is
+-- strictly higher than the average cost of all ticket bookings.
+-- Concepts: Subquery, AVG
+-- ============================================================
+SELECT booking_id, match_id, total_cost
+FROM Bookings
+WHERE total_cost > (SELECT AVG(total_cost) FROM Bookings);
+
+
+-- ============================================================
+-- Query 7: Retrieve the top 2 most expensive matches sorted
+-- by base ticket price, skipping the absolute highest
+-- premium match.
+-- Concepts: ORDER BY, LIMIT, OFFSET
+-- ============================================================
+SELECT match_id, fixture, base_ticket_price
+FROM Matches
+ORDER BY base_ticket_price DESC
+OFFSET 1 LIMIT 2;
